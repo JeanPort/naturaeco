@@ -3,12 +3,11 @@ package com.jean.naturaeco.service.categoria;
 import com.jean.naturaeco.dto.request.CategoriaPostRequest;
 import com.jean.naturaeco.dto.request.CategoriaPutRequest;
 import com.jean.naturaeco.dto.response.CategoriaResponse;
-import com.jean.naturaeco.entity.Categoria;
+import com.jean.naturaeco.exception.NotFoundException;
+import com.jean.naturaeco.exception.ValidationErrorException;
 import com.jean.naturaeco.mapper.CategoriaMapper;
 import com.jean.naturaeco.repo.CategoriaRepo;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class CategoriaServiceImpl implements ICategoriaService{
 
     @Override
     public CategoriaResponse update(CategoriaPutRequest request) {
-        repo.findById(request.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não enctrado"));
+        repo.findById(request.id()).orElseThrow(() -> new NotFoundException("Não enctrado"));
         checkCategoria(request.nome(), request.id());
 
         var categoria = CategoriaMapper.toCategoria(request);
@@ -44,7 +43,7 @@ public class CategoriaServiceImpl implements ICategoriaService{
 
     @Override
     public void delete(Integer idCategoria) {
-        var categoria = repo.findById(idCategoria).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não encontrado"));
+        var categoria = repo.findById(idCategoria).orElseThrow(() -> new NotFoundException("Não enctrado"));
         repo.delete(categoria);
     }
 
@@ -56,19 +55,19 @@ public class CategoriaServiceImpl implements ICategoriaService{
 
     @Override
     public CategoriaResponse findById(Integer idCategoria) {
-        var categoria = repo.findById(idCategoria).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não encontrado"));
+        var categoria = repo.findById(idCategoria).orElseThrow(() -> new NotFoundException("Não enctrado"));
         return CategoriaMapper.toCategoriaResponse(categoria);
     }
 
     private void checkCategoria(String name){
         var res = repo.findByNome(name);
-        if (res.isPresent()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome ja existe");
+        if (res.isPresent()) throw new ValidationErrorException("Nome ja existe");
     }
 
     private void checkCategoria(String name, Integer idCategoria){
         var res = repo.findByNome(name);
         if (res.isPresent() && !res.get().getId().equals(idCategoria)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nome ja existe");
+            throw new ValidationErrorException("Nome ja existe");
         }
     }
 }
