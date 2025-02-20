@@ -4,6 +4,8 @@ import com.jean.naturaeco.dto.request.CategoriaPostRequest;
 import com.jean.naturaeco.dto.request.CategoriaPutRequest;
 import com.jean.naturaeco.dto.response.CategoriaResponse;
 import com.jean.naturaeco.entity.Categoria;
+import com.jean.naturaeco.exception.NotFoundException;
+import com.jean.naturaeco.exception.ValidationErrorException;
 import com.jean.naturaeco.mapper.CategoriaMapper;
 import com.jean.naturaeco.repo.CategoriaRepo;
 import com.jean.naturaeco.service.categoria.CategoriaServiceImpl;
@@ -60,7 +62,7 @@ public class CategoriaServiceTest {
         var res = this.categorias.get(0);
         Mockito.when(repo.findByNome(this.postRequestInvalida.nome())).thenReturn(Optional.of(res));
 
-        Assertions.assertThatException().isThrownBy(() -> service.create(this.postRequestInvalida)).isInstanceOf(ResponseStatusException.class);
+        Assertions.assertThatException().isThrownBy(() -> service.create(this.postRequestInvalida)).isInstanceOf(ValidationErrorException.class);
     }
 
 
@@ -82,7 +84,7 @@ public class CategoriaServiceTest {
         var updataInvalid = new CategoriaPutRequest(19, "Cabelo");
         Mockito.when(repo.findById(updataInvalid.id())).thenReturn(Optional.empty());
 
-        Assertions.assertThatException().isThrownBy(() -> service.update(updataInvalid)).isInstanceOf(ResponseStatusException.class);
+        Assertions.assertThatException().isThrownBy(() -> service.update(updataInvalid)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -92,7 +94,7 @@ public class CategoriaServiceTest {
         Mockito.when(repo.findById(updataInvalid.id())).thenReturn(Optional.of(CategoriaMapper.toCategoria(updataInvalid)));
         Mockito.when(repo.findByNome(updataInvalid.nome())).thenReturn(Optional.of(this.categorias.get(1)));
 
-        Assertions.assertThatException().isThrownBy(() -> service.update(updataInvalid)).isInstanceOf(ResponseStatusException.class);
+        Assertions.assertThatException().isThrownBy(() -> service.update(updataInvalid)).isInstanceOf(ValidationErrorException.class);
     }
     @Test
     void deleteCategoria_ComIdExistente_DeveRemoverCategoria(){
@@ -104,7 +106,7 @@ public class CategoriaServiceTest {
     void deleteCategoria_ComIdInexistente_DeveLancarExcecaoNotFound(){
         var id = 19;
         Mockito.when(repo.findById(id)).thenReturn(Optional.empty());
-        Assertions.assertThatException().isThrownBy(() -> service.delete(id)).isInstanceOf(ResponseStatusException.class);
+        Assertions.assertThatException().isThrownBy(() -> service.delete(id)).isInstanceOf(NotFoundException.class);
     }
     @Test
     void findAllCategorias_DeveRetornarListaDeCategoriaResponse(){
@@ -126,6 +128,6 @@ public class CategoriaServiceTest {
         var id = 10;
         Mockito.when(repo.findById(id)).thenReturn(Optional.empty());
 
-        Assertions.assertThatException().isThrownBy(() -> service.findById(id)).isInstanceOf(ResponseStatusException.class);
+        Assertions.assertThatException().isThrownBy(() -> service.findById(id)).isInstanceOf(NotFoundException.class);
     }
 }
