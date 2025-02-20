@@ -16,6 +16,14 @@ public class Categoria {
     @Column(name = "nome_categoria", nullable = false, unique = true)
     private String nome;
 
+    public Categoria() {
+    }
+
+    public Categoria(Integer id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     public Integer getId() {
         return id;
     }
