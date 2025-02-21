@@ -5,6 +5,6 @@ public record ProdutoResponse(
         String nome,
         String detalhe,
         String linkFoto,
-        Double preco,
-        CategoriaResponse categoria) {
+        Double preco
+        ) {
 }
