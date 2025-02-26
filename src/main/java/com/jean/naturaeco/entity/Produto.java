@@ -4,23 +4,25 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 @Entity
-@Table(name = "tbl_categoria")
+@Table(name = "tbl_Produto")
 public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_categoria")
+    @Column(name = "id_produto")
     private Integer id;
-    @Column(name = "nome_categoria", nullable = false, length = 50)
+    @Column(name = "nome_produto", nullable = false, length = 50)
     private String nome;
     @Column(name = "detalhe_produto", columnDefinition = "TEXT")
     private String detalhe;
     @Column(name = "link_foto", length = 255)
     private String linkFoto;
+    @Column(name = "disponivel")
+    private Integer disponivel;
     @Column(name = "preco_produto", nullable = false)
     private Double preco;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;
 
@@ -38,6 +40,14 @@ public class Produto {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Integer getDisponivel() {
+        return disponivel;
+    }
+
+    public void setDisponivel(Integer disponivel) {
+        this.disponivel = disponivel;
     }
 
     public String getDetalhe() {

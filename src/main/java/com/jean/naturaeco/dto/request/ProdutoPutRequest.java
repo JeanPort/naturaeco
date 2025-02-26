@@ -6,5 +6,6 @@ public record ProdutoPutRequest(
         String detalhe,
         String linkFoto,
         Double preco,
+        Integer disponivel,
         Integer idCategoria) {
 }

@@ -5,6 +5,7 @@ public record ProdutoResponse(
         String nome,
         String detalhe,
         String linkFoto,
-        Double preco
+        Double preco,
+        Integer disponivel
         ) {
 }

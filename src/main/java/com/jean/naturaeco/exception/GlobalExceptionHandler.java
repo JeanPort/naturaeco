@@ -20,4 +20,10 @@ public class GlobalExceptionHandler {
         var error = new DefaultError(e.getMessage(), HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
+    @ExceptionHandler(UploadErrorException.class)
+    public ResponseEntity<DefaultError> handleUploadErrorException(UploadErrorException e) {
+        var error = new DefaultError(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }

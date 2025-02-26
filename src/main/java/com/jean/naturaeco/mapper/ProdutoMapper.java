@@ -19,6 +19,7 @@ public class ProdutoMapper {
         produto.setDetalhe(data.detalhe());
         produto.setLinkFoto(data.linkFoto());
         produto.setPreco(data.preco());
+        produto.setDisponivel(1);
         return produto;
     }
 
@@ -26,18 +27,20 @@ public class ProdutoMapper {
         if(data == null) return null;
 
         Produto produto = new Produto();
+        produto.setId(data.id());
         produto.setNome(data.nome());
         produto.setCategoria(categoria);
         produto.setDetalhe(data.detalhe());
         produto.setLinkFoto(data.linkFoto());
         produto.setPreco(data.preco());
+        produto.setDisponivel(data.disponivel());
         return produto;
     }
 
     public static ProdutoResponse toProdutoResponse(Produto produto) {
         if(produto == null) return null;
 
-        return new ProdutoResponse(produto.getId(), produto.getNome(), produto.getDetalhe(), produto.getLinkFoto(), produto.getPreco());
+        return new ProdutoResponse(produto.getId(), produto.getNome(), produto.getDetalhe(), produto.getLinkFoto(), produto.getPreco(), produto.getDisponivel());
     }
 
     public static List<ProdutoResponse> toListProdutoResponse(List<Produto> produtos){
